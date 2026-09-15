@@ -109,6 +109,54 @@ camera.position.set(
     12
 );
 
+// ------------------------------------------------------------
+// MOVIMIENTO DEL JUGADOR
+// ------------------------------------------------------------
+
+const keys = {};
+
+window.addEventListener("keydown", (event) => {
+    keys[event.code] = true;
+});
+
+window.addEventListener("keyup", (event) => {
+    keys[event.code] = false;
+});
+
+const playerSpeed = 8;
+
+function updatePlayer(delta) {
+
+    const direction = new THREE.Vector3();
+
+    if (keys["KeyW"]) {
+        direction.z -= 1;
+    }
+
+    if (keys["KeyS"]) {
+        direction.z += 1;
+    }
+
+    if (keys["KeyA"]) {
+        direction.x -= 1;
+    }
+
+    if (keys["KeyD"]) {
+        direction.x += 1;
+    }
+
+    if (direction.length() > 0) {
+
+        direction.normalize();
+
+        player.position.x +=
+            direction.x * playerSpeed * delta;
+
+        player.position.z +=
+            direction.z * playerSpeed * delta;
+    }
+}
+
 camera.lookAt(
     player.position
 );
@@ -120,6 +168,10 @@ camera.lookAt(
 function animate() {
 
     requestAnimationFrame(animate);
+
+    const delta = 0.016;
+
+    updatePlayer(delta);
 
     camera.lookAt(
         player.position
